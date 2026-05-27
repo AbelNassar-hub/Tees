@@ -212,6 +212,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
                 <th>Date</th>
                 <th>Client</th>
                 <th>Tel</th>
+                <th>Catégorie</th>
                 <th>Produit</th>
                 <th>Qte</th>
                 <th>Statut</th>
@@ -611,7 +612,7 @@ function displayCommandes(commandes) {
   const tbody = document.getElementById('commandes-tbody');
   
   if (commandes.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">Aucun resultat.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Aucun resultat.</td></tr>';
     return;
   }
   
@@ -620,6 +621,7 @@ function displayCommandes(commandes) {
       <td style="font-size:11px;color:var(--gray);">${formatDate(c.date)}</td>
       <td><b>${c.nom || '—'}</b></td>
       <td style="font-size:12px;">${c.tel || '—'}</td>
+      <td>${c.categorie ? `<span style="background:rgba(216,90,48,0.12);color:#D85A30;border:1px solid rgba(216,90,48,0.3);border-radius:99px;padding:3px 10px;font-size:11px;white-space:nowrap;">${c.categorie}</span>` : '<span style="color:var(--gray);font-size:11px;">—</span>'}</td>
       <td style="font-size:12px;">${c.type || ''} ${c.couleur || ''} ${c.taille || ''}</td>
       <td>${c.quantite || '—'}</td>
       <td>
@@ -629,7 +631,7 @@ function displayCommandes(commandes) {
       </td>
       <td>${statusBadge(c.bat_statut || 'a_creer')}</td>
       <td><div class="action-btns">
-        <button class="btn-sm btn-approve" onclick="creerBATDepuisCommande('${c.id}','${c.nom || ''}','${(c.type || '') + ' ' + (c.couleur || '') + ' ' + (c.taille || '')}','${c.quantite || ''}')">+ BAT</button>
+        <button class="btn-sm btn-approve" onclick="creerBATDepuisCommande('${c.id}','${c.nom || ''}','${(c.categorie || '') + ' — ' + (c.type || '') + ' ' + (c.couleur || '') + ' ' + (c.taille || '')}','${c.quantite || ''}')">+ BAT</button>
         <button class="btn-sm btn-blue" onclick="sendAck('${c.id}')">Accusé</button>
         <button class="btn-sm btn-delete" onclick="deleteCommande('${c.id}')">Suppr.</button>
       </div></td>

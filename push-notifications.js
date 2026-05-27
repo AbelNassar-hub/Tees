@@ -7,7 +7,7 @@ const VAPID_KEY = "BH8zCrccBBMZxxmKx_GqOIFWUfNiEDPccvwqfWctFVkswPcIBH7pssr-t3_FA
 let messaging = null;
 
 // ============================================================
-// ÉTAPE 1 : Enregistrer le Service Worker en premier
+//Enregistrer le Service Worker en premier
 // ============================================================
 async function registerSW() {
   if (!('serviceWorker' in navigator)) {
@@ -27,7 +27,7 @@ async function registerSW() {
 }
 
 // ============================================================
-// ÉTAPE 2 : Initialiser Firebase Messaging
+// Initialiser Firebase Messaging
 // ============================================================
 async function initMessaging(swReg) {
   try {
