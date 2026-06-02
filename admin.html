@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3DROP — Admin</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/3drop_img/forme-de-lemurien.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/tees_img/forme-de-lemurien.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--orange:#D85A30;--orange-dim:rgba(216,90,48,0.12);--dark:#111;--dark2:#1a1a1a;--dark3:#222;--dark4:#2a2a2a;--border:rgba(255,255,255,0.07);--gray:#777;--white:#fff;--green:#3DB887;--green-dim:rgba(61,184,135,0.12);--red:#E05252;--red-dim:rgba(224,82,82,0.12);--blue:#7EB8F7;--blue-dim:rgba(126,184,247,0.12);--radius:10px;}
+:root{--orange:#2a9c7a;--orange-dim:rgba(216,90,48,0.12);--dark:#111;--dark2:#1a1a1a;--dark3:#222;--dark4:#2a2a2a;--border:rgba(255,255,255,0.07);--gray:#777;--white:#ffffff;--green:#3DB887;--green-dim:rgba(61,184,135,0.12);--red:#E05252;--red-dim:rgba(224,82,82,0.12);--blue:#7EB8F7;--blue-dim:rgba(126,184,247,0.12);--radius:10px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;}
 
@@ -19,7 +19,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--white);
 .login-sub{font-size:13px;color:var(--gray);margin-bottom:32px;}
 .login-input{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--white);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s;}
 .login-input:focus{border-color:var(--orange);}
-.login-btn{width:100%;background:var(--orange);color:var(--white);border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s;}
+.login-btn{width:100%;background:var(--white);color:var(--dark);border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s;}
 .login-btn:hover{opacity:.85;}
 .login-error{font-size:12px;color:var(--red);margin-top:10px;display:none;}
 .login-hint{font-size:11px;color:rgba(255,255,255,0.15);margin-top:16px;}
@@ -140,7 +140,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-logo"><span>3</span>DROP</div>
+    <div class="login-logo"><img src="https://res.cloudinary.com/deipbhmsn/image/upload/v1780398710/TeesTxt_ztobfv.png" height="70" alt="Tees"></div>
     <div class="login-sub">Panneau d'administration</div>
     <input type="text" class="login-input" placeholder="Identifiant" id="l-user" onkeydown="if(event.key==='Enter')doLogin()">
     <input type="password" class="login-input" placeholder="Mot de passe" id="l-pass" onkeydown="if(event.key==='Enter')doLogin()">
@@ -154,7 +154,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 <div id="app">
   <div class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo"><img src="/3drop_img/forme-de-lemurien.png" style="width: 32px; height: 32px; margin-right: 3px;" alt=""><span>3</span>DROP</div>
+      <div class="logo"><img src="https://res.cloudinary.com/deipbhmsn/image/upload/v1780398710/TeesTxt_ztobfv.png" height="50" alt="Tees"></div>
       <div class="role">Administration</div>
     </div>
     <nav class="sidebar-nav">
@@ -362,7 +362,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
             </div>
             <div class="form-group" style="margin:0;">
               <label class="form-label">Lien de redirection (optionnel)</label>
-              <input type="text" class="form-control form-control-full" id="notif-url" placeholder="Ex: https://www.3drop.ci/#commande">
+              <input type="text" class="form-control form-control-full" id="notif-url" placeholder="Ex: https://www.tees.ci/#commande">
             </div>
           </div>
 
@@ -488,7 +488,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 
 <script src="firebase.js"></script>
 <script>
-const USERS = {admin: '3drop2026', manager: '3drop2026'};
+const USERS = {admin: 'Tees2026', manager: 'Tees2026'};
 // Endpoint of your deployed notification HTTP function (leave empty to use WhatsApp click-to-chat)
 const NOTIF_ENDPOINT = ''; // e.g. https://us-central1-yourproj.cloudfunctions.net/sendAck
 let lastCreatedCode = '';
@@ -935,11 +935,11 @@ async function deleteToken(id) {
 
 // Templates de messages rapides
 const TEMPLATES = {
-  promo:   { titre: '🔥 Offre weekend 3DROP !',        message: 'Profitez de -10% ce weekend avec le code DROP10. Valable jusqu\'à dimanche minuit !', url: 'https://www.3drop.store/#commande' },
-  nouveau: { titre: '🎨 Nouveau design disponible !',   message: 'On vient d\'ajouter de nouveaux coloris et styles. Venez personnaliser votre t-shirt avant rupture de stock.', url: 'https://www.3drop.store' },
-  groupe:  { titre: '💼 Commandes groupées : -20%',     message: 'Vous avez une équipe ou un événement ? 3DROP vous offre des tarifs spéciaux dès 10 t-shirts. Demandez un devis gratuit.', url: 'https://www.3drop.store/#contact' },
-  avis:    { titre: '❤️ Votre avis compte pour nous',   message: 'Vous avez reçu votre t-shirt 3DROP ? Laissez-nous un avis en 30 secondes. Ça nous aide énormément !', url: 'https://www.3drop.store/#avis' },
-  relance: { titre: '👋 On vous a pas vu depuis un moment !', message: 'Revenez sur 3DROP — on a de nouveaux designs et une surprise pour vous. Votre prochain t-shirt n\'attend que votre idée.', url: 'https://www.3drop.store' },
+  promo:   { titre: '🔥 Offre weekend 3DROP !',        message: 'Profitez de -10% ce weekend avec le code DROP10. Valable jusqu\'à dimanche minuit !', url: 'https://www.tees.store/#commande' },
+  nouveau: { titre: '🎨 Nouveau design disponible !',   message: 'On vient d\'ajouter de nouveaux coloris et styles. Venez personnaliser votre t-shirt avant rupture de stock.', url: 'https://www.tees.store' },
+  groupe:  { titre: '💼 Commandes groupées : -20%',     message: 'Vous avez une équipe ou un événement ? 3DROP vous offre des tarifs spéciaux dès 10 t-shirts. Demandez un devis gratuit.', url: 'https://www.tees.store/#contact' },
+  avis:    { titre: '❤️ Votre avis compte pour nous',   message: 'Vous avez reçu votre t-shirt 3DROP ? Laissez-nous un avis en 30 secondes. Ça nous aide énormément !', url: 'https://www.tees.store/#avis' },
+  relance: { titre: '👋 On vous a pas vu depuis un moment !', message: 'Revenez sur 3DROP — on a de nouveaux designs et une surprise pour vous. Votre prochain t-shirt n\'attend que votre idée.', url: 'https://www.tees.store' },
 };
 
 function useTemplate(key) {

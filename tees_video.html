@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3DROP — Présentation Vidéo</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/tees_img/forme-de-lemurien.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; }
+
+body {
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  padding: 12px;
+  gap: 12px;
+  overflow-x: hidden;
+}
+
+/* VIDEO CONTAINER 16:9 */
+.video-wrap {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  padding: 0 8px;
+}
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #0e0e0e;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+}
+
+/* SLIDES */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 5%, 40px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s ease;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* SLIDE BACKGROUNDS */
+.slide-1 { background: radial-gradient(ellipse 100% 80% at 60% 30%, rgba(216,90,48,0.2) 0%, #0e0e0e 65%); }
+.slide-2 { background: #0e0e0e; }
+.slide-3 { background: linear-gradient(135deg, #0e0e0e 60%, rgba(216,90,48,0.08)); }
+.slide-4 { background: #0e0e0e; }
+.slide-5 { background: radial-gradient(ellipse 80% 80% at 30% 60%, rgba(216,90,48,0.12) 0%, #0e0e0e 60%); }
+.slide-6 { background: #111; }
+.slide-7 { background: radial-gradient(circle at center, rgba(216,90,48,0.15) 0%, #0e0e0e 70%); }
+
+/* TYPOGRAPHY */
+.slide-tag {
+  font-size: clamp(9px, 2vw, 11px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #D85A30;
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .5s ease .2s;
+}
+.slide.active .slide-tag { opacity: 1; transform: translateY(0); }
+
+.slide-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px, 6vw, 64px);
+  line-height: .95;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all .5s ease .3s;
+  word-break: break-word;
+}
+.slide.active .slide-title { opacity: 1; transform: translateY(0); }
+.slide-title .accent { color: #D85A30; }
+.slide-title .outline {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+  color: transparent;
+}
+
+.slide-sub {
+  font-size: clamp(12px, 2.5vw, 15px);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-top: 10px;
+  max-width: 90%;
+  line-height: 1.6;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .5s ease .45s;
+}
+.slide.active .slide-sub { opacity: 1; transform: translateY(0); }
+
+/* LOGO SLIDE */
+.big-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 12vw, 120px);
+  letter-spacing: clamp(4px, 2vw, 8px);
+  color: #fff;
+  opacity: 0;
+  transform: scale(.8);
+  transition: all .7s cubic-bezier(.34,1.56,.64,1) .1s;
+}
+.big-logo span { color: #D85A30; }
+.slide.active .big-logo { opacity: 1; transform: scale(1); }
+.big-tagline {
+  font-size: clamp(10px, 2vw, 13px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 6px;
+  opacity: 0;
+  transition: all .5s ease .5s;
+  padding: 0 12px;
+  text-align: center;
+}
+.slide.active .big-tagline { opacity: 1; }
+
+/* STEP CARDS */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: clamp(8px, 2vw, 12px);
+  width: 100%;
+  max-width: 560px;
+  margin-top: clamp(12px, 3vw, 20px);
+  padding: 0 8px;
+}
+.step-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: clamp(12px, 2vw, 16px);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all .4s ease;
+}
+.slide.active .step-card:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: .3s; }
+.slide.active .step-card:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: .45s; }
+.slide.active .step-card:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: .6s; }
+.slide.active .step-card:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: .75s; }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px, 5vw, 32px); color: #D85A30; line-height: 1; }
+.step-title { font-size: clamp(12px, 2vw, 14px); font-weight: 500; color: #fff; margin: 4px 0; }
+.step-desc { font-size: clamp(10px, 1.8vw, 12px); color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+/* SERVICES LIST */
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  width: 100%;
+  max-width: 520px;
+  margin-top: clamp(10px, 2vw, 16px);
+  padding: 0 8px;
+}
+.service-row {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(10px, 2vw, 16px);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: clamp(10px, 2vw, 14px) clamp(12px, 2vw, 18px);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all .4s ease;
+}
+.slide.active .service-row:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: .3s; }
+.slide.active .service-row:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: .45s; }
+.slide.active .service-row:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: .6s; }
+.slide.active .service-row:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: .75s; }
+.service-icon { font-size: clamp(18px, 4vw, 22px); flex-shrink: 0; }
+.service-info-title { font-size: clamp(12px, 2vw, 14px); font-weight: 500; color: #fff; }
+.service-info-sub { font-size: clamp(10px, 1.8vw, 12px); color: rgba(255,255,255,0.4); margin-top: 2px; }
+.service-check { margin-left: auto; color: #D85A30; font-size: clamp(14px, 3vw, 16px); flex-shrink: 0; }
+
+/* BAT DEMO */
+.bat-demo {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: clamp(14px, 3vw, 20px);
+  width: 100%;
+  max-width: 440px;
+  margin-top: clamp(10px, 2vw, 16px);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all .5s ease .4s;
+}
+.slide.active .bat-demo { opacity: 1; transform: translateY(0); }
+.bat-demo-header { font-size: clamp(9px, 2vw, 12px); color: rgba(255,255,255,0.3); margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase; }
+.bat-preview {
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: clamp(12px, 2vw, 16px);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.bat-preview svg { width: 100%; height: auto; max-width: 120px; }
+.bat-buttons { display: flex; gap: 8px; }
+.bat-btn {
+  flex: 1;
+  padding: clamp(8px, 2vw, 10px);
+  border-radius: 8px;
+  font-size: clamp(10px, 2vw, 12px);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  min-height: 36px;
+}
+.bat-ok { background: rgba(61,184,135,0.15); border: 1px solid rgba(61,184,135,0.3); color: #3DB887; }
+.bat-mod { background: rgba(216,90,48,0.1); border: 1px solid rgba(216,90,48,0.3); color: #D85A30; }
+
+/* STATS ROW */
+.stats-row-slide {
+  display: flex;
+  gap: clamp(12px, 3vw, 16px);
+  margin-top: clamp(14px, 3vw, 20px);
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 8px;
+}
+.stat-item {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .4s ease;
+}
+.slide.active .stat-item:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: .3s; }
+.slide.active .stat-item:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: .5s; }
+.slide.active .stat-item:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: .7s; }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 8vw, 52px); color: #D85A30; line-height: 1; }
+.stat-label { font-size: clamp(10px, 2vw, 12px); color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+/* CTA SLIDE */
+.cta-box {
+  background: #D85A30;
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 24px) clamp(24px, 5vw, 40px);
+  text-align: center;
+  margin-top: clamp(12px, 3vw, 20px);
+  opacity: 0;
+  transform: scale(.9);
+  transition: all .5s cubic-bezier(.34,1.56,.64,1) .4s;
+}
+.slide.active .cta-box { opacity: 1; transform: scale(1); }
+.cta-url { font-family: 'Bebas Neue', sans-serif; font-size: clamp(20px, 5vw, 32px); letter-spacing: 2px; color: #fff; }
+.cta-sub { font-size: clamp(10px, 2vw, 13px); color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+/* FORM DEMO */
+.form-demo {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: clamp(14px, 3vw, 20px);
+  width: 100%;
+  max-width: 480px;
+  margin-top: clamp(10px, 2vw, 14px);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all .5s ease .4s;
+}
+.slide.active .form-demo { opacity: 1; transform: translateY(0); }
+.form-demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.form-demo-field {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 12px);
+}
+.fdf-label { font-size: clamp(8px, 1.8vw, 10px); color: rgba(255,255,255,0.3); margin-bottom: 2px; }
+.fdf-val { font-size: clamp(10px, 2vw, 12px); color: rgba(255,255,255,0.7); }
+.form-demo-btn {
+  width: 100%;
+  background: #D85A30;
+  border: none;
+  border-radius: 8px;
+  padding: clamp(8px, 2vw, 10px);
+  font-size: clamp(11px, 2vw, 13px);
+  font-weight: 500;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  margin-top: 6px;
+  min-height: 36px;
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+  width: 100%;
+  max-width: 900px;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 4px 8px;
+}
+.progress-fill {
+  height: 100%;
+  background: #D85A30;
+  border-radius: 99px;
+  transition: width .4s ease;
+}
+
+/* CONTROLS */
+.video-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 12px);
+  width: 100%;
+  max-width: 900px;
+  padding: 0 8px;
+}
+.ctrl-btn {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  padding: clamp(8px, 1.5vw, 10px) clamp(14px, 2vw, 20px);
+  border-radius: 8px;
+  font-size: clamp(11px, 2vw, 13px);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .2s;
+  white-space: nowrap;
+  min-height: 36px;
+}
+.ctrl-btn:hover { border-color: #D85A30; color: #D85A30; }
+.ctrl-btn.play-btn { background: #D85A30; border-color: #D85A30; min-width: 100px; }
+
+.slide-counter {
+  font-size: clamp(11px, 2vw, 13px);
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+  flex-basis: 100%;
+  text-align: center;
+  order: 3;
+}
+
+/* DOTS */
+.dots {
+  display: flex;
+  gap: clamp(4px, 1vw, 6px);
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 8px;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: all .2s;
+}
+.dot.active { background: #D85A30; width: 20px; border-radius: 99px; }
+
+/* SLIDE INDICATOR TOP-RIGHT */
+.slide-badge {
+  position: absolute;
+  top: clamp(8px, 2vw, 16px);
+  right: clamp(8px, 2vw, 16px);
+  font-size: clamp(8px, 1.8vw, 10px);
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+/* DIVIDER LINE DECO */
+.poster-line {
+  width: 40px;
+  height: 2px;
+  background: #D85A30;
+  margin: 8px auto 0;
+  opacity: 0;
+  transition: all .4s ease .5s;
+}
+.slide.active .poster-line { opacity: 1; }
+
+/* TOUCH SWIPE */
+.video-frame{touch-action:pan-y;}
+
+/* RESPONSIVE BREAKPOINTS */
+/* TABLET */
+@media(max-width:768px){
+  .steps-grid{grid-template-columns:1fr 1fr;}
+  .video-controls{justify-content:center;}
+  .slide-counter{margin-left:0;}
+  .stat-num{font-size:clamp(28px,6vw,48px);}
+  .slide-title{font-size:clamp(20px,5vw,60px);}
+}
+ 
+/* MOBILE */
+@media(max-width:480px){
+  body{padding:6px;gap:6px;}
+  .steps-grid{grid-template-columns:1fr;}
+  .form-demo-row{grid-template-columns:1fr;}
+  .ctrl-btn{padding:7px 10px;font-size:10px;}
+  .ctrl-btn.play-btn{min-width:70px;}
+  .slide-counter{display:none;}
+  .services-list{gap:4px;}
+  .service-row{padding:6px 8px;gap:8px;}
+  .service-icon{font-size:13px;}
+  .service-info-title{font-size:10px;}
+  .service-info-sub{display:none;}
+  .service-check{display:none;}
+  .step-card{padding:8px 10px;}
+  .step-num{font-size:20px;}
+  .step-title{font-size:10px;}
+  .step-desc{font-size:9px;}
+  .bat-demo{padding:10px;}
+  .bat-btn{font-size:9px;padding:6px 4px;}
+  .form-demo{padding:10px;}
+  .fdf-label{font-size:8px;}
+  .fdf-val{font-size:9px;}
+  .form-demo-btn{font-size:10px;padding:8px;}
+  .dots{gap:4px;}
+  .dot{width:5px;height:5px;}
+  .dot.active{width:14px;}
+  .progress-bar{height:2px;}
+  .stats-row-slide{gap:8px;}
+  .stat-num{font-size:28px;}
+  .stat-label{font-size:9px;}
+  .cta-box{padding:12px 16px;border-radius:10px;max-width:96%;}
+  .cta-url{font-size:18px;letter-spacing:1px;}
+  .cta-sub{font-size:9px;}
+  .slide{padding:10px;}
+  .slide-badge{font-size:7px;top:6px;right:6px;}
+  .big-logo{letter-spacing:3px;}
+  .big-tagline{letter-spacing:2px;font-size:9px;}
+  .poster-line{width:24px;}
+  .video-controls{gap:4px;justify-content:center;}
+  .slide-sub{font-size:9px !important;}
+  .slide-tag{font-size:8px;letter-spacing:2px;}
+}
+@media(max-width:360px){
+  .big-logo{font-size:clamp(32px,10vw,60px);}
+  .slide-title{font-size:clamp(18px,5.5vw,36px);}
+  .steps-grid{gap:5px;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="video-wrap">
+  <div class="video-frame" id="video">
+
+    <!-- SLIDE 1 — INTRO LOGO -->
+    <div class="slide slide-1 active" data-index="0">
+      <div class="slide-badge">Intro</div>
+      <div class="big-logo"><span>3</span>DROP</div>
+      <div class="big-tagline">T-shirts personnalisés · Abidjan</div>
+      <div class="poster-line"></div>
+    </div>
+
+    <!-- SLIDE 2 — SERVICES -->
+    <div class="slide slide-2" data-index="1">
+      <div class="slide-badge">Services</div>
+      <div class="slide-tag">Ce que nous proposons</div>
+      <div class="slide-title">NOS <span class="accent">SERVICES</span></div>
+      <div class="services-list">
+        <div class="service-row">
+          <div class="service-icon">👕</div>
+          <div>
+            <div class="service-info-title">T-shirts personnalisés toutes tailles</div>
+            <div class="service-info-sub">Col rond, col V, oversize, polo, manche longue</div>
+          </div>
+          <div class="service-check">✦</div>
+        </div>
+        <div class="service-row">
+          <div class="service-icon">🎨</div>
+          <div>
+            <div class="service-info-title">Votre design, votre couleur</div>
+            <div class="service-info-sub">Logo, texte, illustration — tout est possible</div>
+          </div>
+          <div class="service-check">✦</div>
+        </div>
+        <div class="service-row">
+          <div class="service-icon">✅</div>
+          <div>
+            <div class="service-info-title">Validation BAT avant impression</div>
+            <div class="service-info-sub">Vous approuvez la maquette avant qu'on imprime</div>
+          </div>
+          <div class="service-check">✦</div>
+        </div>
+        <div class="service-row">
+          <div class="service-icon">🚀</div>
+          <div>
+            <div class="service-info-title">Livraison rapide sur Abidjan</div>
+            <div class="service-info-sub">Délai moyen de 48h après validation</div>
+          </div>
+          <div class="service-check">✦</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 — COMMENT CA MARCHE -->
+    <div class="slide slide-3" data-index="2">
+      <div class="slide-badge">Processus</div>
+      <div class="slide-tag">4 étapes simples</div>
+      <div class="slide-title">COMMENT <span class="accent">CA</span><br><span class="outline">MARCHE</span></div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Commandez en ligne</div>
+          <div class="step-desc">Remplissez le formulaire sur notre site depuis votre téléphone</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Uploadez votre visuel</div>
+          <div class="step-desc">Logo, texte ou illustration en PNG, JPG ou PDF</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">Validez le BAT</div>
+          <div class="step-desc">On vous envoie la maquette — vous approuvez avant impression</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Recevez votre commande</div>
+          <div class="step-desc">Livraison rapide et qualité garantie à 100%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 — PASSER COMMANDE -->
+    <div class="slide slide-4" data-index="3">
+      <div class="slide-badge">Tutoriel</div>
+      <div class="slide-tag">Comment passer commande</div>
+      <div class="slide-title"><span class="accent">PASSER</span> UNE<br>COMMANDE</div>
+      <div class="form-demo">
+        <div class="form-demo-row">
+          <div class="form-demo-field">
+            <div class="fdf-label">Type de t-shirt</div>
+            <div class="fdf-val">Col rond ▾</div>
+          </div>
+          <div class="form-demo-field">
+            <div class="fdf-label">Taille</div>
+            <div class="fdf-val">L ▾</div>
+          </div>
+        </div>
+        <div class="form-demo-row">
+          <div class="form-demo-field">
+            <div class="fdf-label">Couleur</div>
+            <div class="fdf-val">Noir ▾</div>
+          </div>
+          <div class="form-demo-field">
+            <div class="fdf-label">Quantité</div>
+            <div class="fdf-val">10 pièces ▾</div>
+          </div>
+        </div>
+        <div class="form-demo-field" style="margin-bottom:10px;">
+          <div class="fdf-label">Votre visuel</div>
+          <div class="fdf-val" style="color:#D85A30;">📎 logo_entreprise.png — Chargé ✓</div>
+        </div>
+        <button class="form-demo-btn">Envoyer ma commande →</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 — BAT -->
+    <div class="slide slide-5" data-index="4">
+      <div class="slide-badge">BAT</div>
+      <div class="slide-tag">Validation de maquette</div>
+      <div class="slide-title">VOTRE <span class="accent">BAT</span><br><span class="outline">EN LIGNE</span></div>
+      <div class="bat-demo">
+        <div class="bat-demo-header">Maquette · Code commande : 3D-042</div>
+        <div class="bat-preview">
+          <svg width="120" height="100" viewBox="0 0 120 100">
+            <path d="M14 28L24 20H36C36 24 84 24 84 20H96L106 28L98 44L88 36V92H32V36L22 44Z"
+              fill="#1a1a1a" stroke="#333" stroke-width="1" stroke-linejoin="round"/>
+            <text x="60" y="64" text-anchor="middle" font-family="'Bebas Neue',sans-serif"
+              font-size="14" fill="#D85A30" letter-spacing="2">3DROP</text>
+          </svg>
+          <div style="font-size:clamp(9px, 2vw, 11px);color:rgba(255,255,255,0.3);margin-top:6px;">Col rond Noir · Taille L · x10</div>
+        </div>
+        <div class="bat-buttons">
+          <button class="bat-btn bat-ok">✓ Je valide ce BAT</button>
+          <button class="bat-btn bat-mod">✎ Modifier</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 — CHIFFRES -->
+    <div class="slide slide-6" data-index="5">
+      <div class="slide-badge">Confiance</div>
+      <div class="slide-tag">Pourquoi choisir 3DROP</div>
+      <div class="slide-title"><span class="accent">3DROP</span><br>EN CHIFFRES</div>
+      <div class="stats-row-slide">
+        <div class="stat-item">
+          <div class="stat-num">500+</div>
+          <div class="stat-label">Commandes livrées</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">48H</div>
+          <div class="stat-label">Délai moyen</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9★</div>
+          <div class="stat-label">Note clients</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 — CTA FINAL -->
+    <div class="slide slide-7" data-index="6">
+      <div class="slide-badge">Fin</div>
+      <div class="big-logo" style="font-size: clamp(42px, 10vw, 90px);">Tees</div>
+      <div class="big-tagline">Votre design, notre art.</div>
+      <div class="cta-box">
+        <div class="cta-url">www.tees.store</div>
+        <div class="cta-sub">Commandez en ligne · Réponse sous 24h</div>
+      </div>
+      <div class="slide-sub" style="opacity:1;transform:none;margin-top:8px;font-size:clamp(11px, 2.5vw, 13px);">
+        📱 +225 01 53 26 0138 &nbsp;·&nbsp; ✉️ contact@tees.com
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-fill" id="progress" style="width: 14.28%;"></div>
+</div>
+
+<!-- DOTS -->
+<div class="dots" id="dots">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+  <div class="dot" onclick="goTo(6)"></div>
+</div>
+
+<!-- CONTROLS -->
+<div class="video-controls">
+  <button class="ctrl-btn" onclick="prev()">◀ Précédent</button>
+  <button class="ctrl-btn play-btn" id="play-btn" onclick="togglePlay()">▶ Lecture auto</button>
+  <button class="ctrl-btn" onclick="next()">Suivant ▶</button>
+  <div class="slide-counter" id="counter">Diapo 1 / 7</div>
+</div>
+
+<script>
+const TOTAL = 7;
+const DURATION = 7000; // 7s per slide
+let current = 0;
+let playing = false;
+let timer = null;
+
+function goTo(idx) {
+  document.querySelectorAll('.slide')[current].classList.remove('active');
+  document.querySelectorAll('.dot')[current].classList.remove('active');
+  
+  current = (idx + TOTAL) % TOTAL;
+  
+  document.querySelectorAll('.slide')[current].classList.add('active');
+  document.querySelectorAll('.dot')[current].classList.add('active');
+  document.getElementById('progress').style.width = ((current + 1) / TOTAL * 100) + '%';
+  document.getElementById('counter').textContent = `Diapo ${current + 1} / ${TOTAL}`;
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+function togglePlay() {
+  playing = !playing;
+  const btn = document.getElementById('play-btn');
+  const audio = document.getElementById('ambient-sound');
+
+  if (playing) {
+    btn.textContent = '⏸ Pause';
+    timer = setInterval(() => {
+      next();
+    }, DURATION);
+    
+    audio.play().catch(() => {});
+  } else {
+    btn.textContent = '▶ Lecture auto';
+    clearInterval(timer);
+    audio.pause();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') next();
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+});
+</script>
+<audio id="ambient-sound" loop preload="none">
+  <source src="/tees_sound/monume-advertising-advertising-music-519222.mp3" type="audio/mpeg">
+</audio>
+</body>
+</html> 

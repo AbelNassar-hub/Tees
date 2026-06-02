@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3DROP — Affiche Publicitaire</title>
+www.3drop.store
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .ctrl-btn {
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all .2s;
+  }
+  .ctrl-btn:hover { border-color: #D85A30; color: #D85A30; }
+  .ctrl-btn.active { background: #D85A30; border-color: #D85A30; }
+
+  /* POSTER WRAPPER */
+  .poster-wrap {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+  }
+
+  /* POSTER A3 ratio 1:1.414 → 600x849 */
+  .poster {
+    width: 600px;
+    height: 849px;
+    position: relative;
+    overflow: hidden;
+    background: #0e0e0e;
+    border-radius: 4px;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+    margin: 0 auto;
+  }
+
+  /* BACKGROUND TEXTURE */
+  .poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 20%, rgba(216,90,48,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(216,90,48,0.08) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  /* GRAIN OVERLAY */
+  .poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: .4;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .poster-inner {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOP BAR */
+  .poster-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 36px 0;
+  }
+  .poster-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    color: #fff;
+  }
+  .poster-logo span { color: #D85A30; }
+  .poster-badge {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #D85A30;
+    border: 1px solid rgba(216,90,48,0.4);
+    padding: 5px 12px;
+    border-radius: 99px;
+  }
+
+  /* HERO TEXT */
+  .poster-hero {
+    padding: 32px 36px 0;
+    flex: 1;
+  }
+  .poster-hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 108px;
+    line-height: .88;
+    letter-spacing: -1px;
+    color: #fff;
+    position: relative;
+  }
+  .poster-hero h1 .accent { color: #D85A30; }
+  .poster-hero h1 .outline {
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.2);
+    color: transparent;
+  }
+
+  /* DIAGONAL DIVIDER */
+  .divider-line {
+    width: 60px;
+    height: 2px;
+    background: #D85A30;
+    margin: 20px 36px;
+  }
+
+  /* TAGLINE */
+  .poster-tagline {
+    padding: 0 36px;
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 340px;
+    font-style: italic;
+  }
+
+  /* CENTER T-SHIRT */
+  .poster-tshirt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 0;
+    position: relative;
+  }
+  .tshirt-glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(216,90,48,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* SERVICES ROW */
+  .services-row {
+    display: flex;
+    gap: 0;
+    margin: 16px 36px 0;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .service-item {
+    flex: 1;
+    padding: 14px 12px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+  }
+  .service-item:last-child { border-right: none; }
+  .service-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #D85A30;
+    line-height: 1;
+  }
+  .service-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 3px;
+    letter-spacing: .5px;
+  }
+
+  /* STEPS */
+  .steps-block {
+    margin: 20px 36px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .step-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .step-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(216,90,48,0.15);
+    border: 1px solid rgba(216,90,48,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: #D85A30;
+    flex-shrink: 0;
+  }
+  .step-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+  .step-text b { color: #fff; font-weight: 500; }
+  .step-arrow {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* CTA BOTTOM */
+  .poster-bottom {
+    margin: 20px 36px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .cta-block {
+    background: #D85A30;
+    border-radius: 10px;
+    padding: 16px 24px;
+    flex: 1;
+  }
+  .cta-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
+  .cta-url { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: #fff; }
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+  }
+  .contact-item { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .contact-item b { color: rgba(255,255,255,0.8); }
+
+  /* SIDE DECORATIONS */
+  .side-text {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.06);
+    white-space: nowrap;
+    z-index: 5;
+  }
+
+  /* CORNER DOTS */
+  .corner {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #D85A30;
+    opacity: .4;
+    z-index: 5;
+  }
+  .corner.tl { top: 20px; left: 20px; }
+  .corner.tr { top: 20px; right: 20px; }
+  .corner.bl { bottom: 20px; left: 20px; }
+  .corner.br { bottom: 20px; right: 20px; }
+
+  /* HORIZONTAL RULE DECO */
+  .deco-line {
+    position: absolute;
+    left: 36px;
+    right: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    z-index: 5;
+  }
+
+  /* PRINT INFO */
+  .print-info {
+    color: rgba(255,255,255,0.2);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: #0e0e0e; padding: 0; }
+    .controls, .print-info { display: none; }
+    .poster { box-shadow: none; }
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .poster-inner > * { animation: fadeIn .5s ease both; }
+  .poster-inner > *:nth-child(1) { animation-delay: .1s; }
+  .poster-inner > *:nth-child(2) { animation-delay: .2s; }
+  .poster-inner > *:nth-child(3) { animation-delay: .3s; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="ctrl-btn active" onclick="setTheme('dark')">🌑 Sombre</button>
+  <button class="ctrl-btn" onclick="setTheme('light')">☀️ Clair</button>
+  <button class="ctrl-btn" onclick="window.print()">🖨️ Imprimer / Sauvegarder</button>
+</div>
+
+<div class="poster-wrap">
+  <div class="poster" id="poster">
+
+    <!-- CORNER DOTS -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <!-- DECO LINE -->
+    <div class="deco-line" style="top: 68px;"></div>
+    <div class="deco-line" style="bottom: 80px;"></div>
+
+    <!-- SIDE TEXT -->
+    <div class="side-text">3DROP · T-SHIRTS PERSONNALISES · ABIDJAN CI</div>
+
+    <div class="poster-inner">
+
+      <!-- TOP BAR -->
+      <div class="poster-topbar">
+        <div class="poster-logo"><span>3</span>DROP</div>
+        <div class="poster-badge">Abidjan · Côte d'Ivoire</div>
+      </div>
+
+      <!-- HERO -->
+      <div class="poster-hero">
+        <h1>
+          <span class="outline">VOTRE</span><br>
+          DESIGN<br>
+          <span class="accent">NOTRE</span><br>
+          <span class="outline">ART.</span>
+        </h1>
+      </div>
+
+      <div class="divider-line"></div>
+
+      <div class="poster-tagline">
+        T-shirts 100% personnalisés, fabriqués avec soin.<br>
+        Du visuel à la livraison — on s'occupe de tout.
+      </div>
+
+      <!-- T-SHIRT SVG -->
+      <div class="poster-tshirt">
+        <div class="tshirt-glow"></div>
+        <svg width="260" height="230" viewBox="0 0 260 230">
+          <!-- Shadow -->
+          <ellipse cx="130" cy="218" rx="80" ry="8" fill="rgba(216,90,48,0.15)"/>
+          <!-- T-shirt body -->
+          <path d="M30 70L60 50H94C94 62 166 62 166 50H200L230 70L210 110L182 90V210H78V90L50 110Z"
+            fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Collar shadow -->
+          <path d="M94 50C94 62 166 62 166 50" fill="none" stroke="#111" stroke-width="3"/>
+          <!-- Orange accent line left sleeve -->
+          <line x1="50" y1="110" x2="30" y2="70" stroke="#D85A30" stroke-width="1" opacity=".4"/>
+          <!-- Orange accent line right sleeve -->
+          <line x1="210" y1="110" x2="230" y2="70" stroke="#D85A30" stroke-width="1" opacity=".4"/>
+          <!-- 3DROP text on shirt -->
+          <text x="130" y="148" text-anchor="middle"
+            font-family="'Bebas Neue', sans-serif"
+            font-size="32" fill="#D85A30" letter-spacing="4">3DROP</text>
+          <!-- Tagline on shirt -->
+          <text x="130" y="165" text-anchor="middle"
+            font-family="'DM Sans', sans-serif"
+            font-size="9" fill="rgba(255,255,255,0.3)" letter-spacing="3">PERSONNALISE</text>
+          <!-- Small design element -->
+          <circle cx="130" cy="126" r="2" fill="#D85A30" opacity=".6"/>
+          <!-- Seam lines -->
+          <line x1="78" y1="90" x2="78" y2="210" stroke="#222" stroke-width="1" stroke-dasharray="4,8"/>
+          <line x1="182" y1="90" x2="182" y2="210" stroke="#222" stroke-width="1" stroke-dasharray="4,8"/>
+        </svg>
+      </div>
+
+      <!-- SERVICES ROW -->
+      <div class="services-row">
+        <div class="service-item">
+          <div class="service-num">500+</div>
+          <div class="service-label">Commandes</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">48H</div>
+          <div class="service-label">Délai moyen</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">4.9★</div>
+          <div class="service-label">Satisfaction</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">100%</div>
+          <div class="service-label">Garanti</div>
+        </div>
+      </div>
+
+      <!-- STEPS -->
+      <div class="steps-block">
+        <div class="step-row">
+          <div class="step-circle">1</div>
+          <div class="step-text"><b>Commandez en ligne</b> — taille, couleur, visuel</div>
+          <div class="step-arrow">→</div>
+        </div>
+        <div class="step-row">
+          <div class="step-circle">2</div>
+          <div class="step-text"><b>Validez votre BAT</b> — maquette avant impression</div>
+          <div class="step-arrow">→</div>
+        </div>
+        <div class="step-row">
+          <div class="step-circle">3</div>
+          <div class="step-text"><b>Recevez</b> — livraison rapide sur Abidjan</div>
+          <div class="step-arrow">→</div>
+        </div>
+      </div>
+
+      <!-- BOTTOM CTA -->
+      <div class="poster-bottom">
+        <div class="cta-block">
+          <div class="cta-label">Commandez maintenant</div>
+          <div class="cta-url">www.3drop.ci</div>
+        </div>
+        <div class="contact-block">
+          <div class="contact-item">📱 <b>+225 07 00 00 00</b></div>
+          <div class="contact-item">✉️ <b>contact@3drop.ci</b></div>
+          <div class="contact-item">📍 Abidjan, Côte d'Ivoire</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="print-info">
+  Cliquez sur "Imprimer / Sauvegarder" pour exporter en PDF · Format A3
+</div>
+
+<script>
+function setTheme(theme) {
+  const poster = document.getElementById('poster');
+  document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  if (theme === 'light') {
+    poster.style.background = '#f5f0e8';
+    poster.querySelectorAll('.poster-hero h1').forEach(el => el.style.color = '#111');
+    poster.querySelectorAll('.poster-logo').forEach(el => el.style.color = '#111');
+    poster.querySelectorAll('.poster-tagline').forEach(el => el.style.color = 'rgba(0,0,0,0.5)');
+    poster.querySelectorAll('.service-label').forEach(el => el.style.color = 'rgba(0,0,0,0.4)');
+    poster.querySelectorAll('.step-text').forEach(el => el.style.color = 'rgba(0,0,0,0.6)');
+    poster.querySelectorAll('.contact-item').forEach(el => el.style.color = 'rgba(0,0,0,0.5)');
+    poster.querySelectorAll('.services-row').forEach(el => el.style.borderColor = 'rgba(0,0,0,0.1)');
+    poster.querySelectorAll('.service-item').forEach(el => el.style.borderColor = 'rgba(0,0,0,0.1)');
+    poster.style.setProperty('--text', '#111');
+  } else {
+    poster.style.background = '#0e0e0e';
+    poster.querySelectorAll('.poster-hero h1').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.poster-logo').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.poster-tagline').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.service-label').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.step-text').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.contact-item').forEach(el => el.style.color = '');
+    poster.querySelectorAll('.services-row').forEach(el => el.style.borderColor = '');
+    poster.querySelectorAll('.service-item').forEach(el => el.style.borderColor = '');
+  }
+}
+</script>
+</body>
+</html>
